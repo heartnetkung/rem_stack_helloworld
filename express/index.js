@@ -2,6 +2,7 @@ const env = require("../env");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const https = require("https");
 
 const main = async () => {
 	//mongoose
@@ -25,7 +26,15 @@ const main = async () => {
 	var app = express();
 	app.use(cors());
 	for (var route in routes) app.get(route, routes[route]);
-	app.listen(env.port);
+
+	if (!env.https) return app.listen(env.port);
+
+	var httpsConfig = {
+		key: fs.readFileSync(path.join(__dirname, "..", "privkey.pem"), "utf8"),
+		cert: fs.readFileSync(path.join(__dirname, "..", "cert.pem"), "utf8"),
+		ca: fs.readFileSync(path.join(__dirname, "..", "chain.pem"), "utf8"),
+	};
+	https.createServer(httpsConfig, app).listen(env.port);
 };
 
 if (require.main === module) main().catch((e) => console.error(e));
