@@ -7,7 +7,10 @@ const main = async () => {
 	//mongoose
 	var mongoStatus = "not connected";
 	mongoose
-		.connect(env.mongo_url, { useNewUrlParser: true })
+		.connect(env.mongo_url, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		})
 		.then(() => (mongoStatus = "connected"))
 		.catch((e) => (mongoStatus = e.message));
 
