@@ -24,7 +24,7 @@ const main = async () => {
 	//express
 	var app = express();
 	app.use(cors());
-	for (var route of routes) app.get(route, routes[route]);
+	for (var route in routes) app.get(route, routes[route]);
 	app.listen(env.port);
 };
 
